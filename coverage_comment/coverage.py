@@ -67,11 +67,11 @@ def compute_coverage(num_covered: int, num_total: int) -> decimal.Decimal:
     return decimal.Decimal(num_covered) / decimal.Decimal(num_total)
 
 
-def get_coverage_info(merge: bool) -> Coverage:
+def get_coverage_info(merge: bool, data: str) -> Coverage:
     log.info("Getting the coverage data")
+    log.info("Got the following coverage data ", data)
     try:
-        with open('./coverage.json', 'r') as f:
-            return extract_info(json.load(f))
+        return extract_info(json.loads(data))
         # if merge:
         #     subprocess.run("coverage", "combine")
 

@@ -22,6 +22,9 @@ inputs:
       [Advanced] Specify a different template for the comments that will be written on
       the PR. See the Action README documentation for how to use this properly.
     required: false
+  COVERAGE_JSON_DATA:
+    description: Raw json data for the calculated coverage.
+    required: false
   COVERAGE_DATA_BRANCH:
     description: >
       Name of the branch in which coverage data will be stored on the repository.
@@ -83,6 +86,7 @@ runs:
     COMMENT_TEMPLATE: ${{ inputs.COMMENT_TEMPLATE }}
     COVERAGE_DATA_BRANCH: ${{ inputs.COVERAGE_DATA_BRANCH }}
     COMMENT_ARTIFACT_NAME: ${{ inputs.COMMENT_ARTIFACT_NAME }}
+    COVERAGE_JSON_DATA: ${{ inputs.COVERAGE_JSON_DATA }}
     COMMENT_FILENAME: ${{ inputs.COMMENT_FILENAME }}
     MINIMUM_GREEN: ${{ inputs.MINIMUM_GREEN }}
     MINIMUM_ORANGE: ${{ inputs.MINIMUM_ORANGE }}

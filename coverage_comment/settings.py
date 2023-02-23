@@ -40,6 +40,7 @@ class Config:
     GITHUB_PR_RUN_ID: int | None
     COMMENT_TEMPLATE: str | None = None
     COVERAGE_DATA_BRANCH: str = "python-coverage-comment-action-data"
+    COVERAGE_JSON_DATA: str | None = None
     COMMENT_ARTIFACT_NAME: str = "python-coverage-comment-action"
     COMMENT_FILENAME: pathlib.Path = pathlib.Path("python-coverage-comment-action.txt")
     GITHUB_OUTPUT: pathlib.Path | None = None
