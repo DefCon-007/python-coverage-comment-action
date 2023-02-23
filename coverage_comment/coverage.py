@@ -68,11 +68,14 @@ def compute_coverage(num_covered: int, num_total: int) -> decimal.Decimal:
 
 
 def get_coverage_info(merge: bool) -> Coverage:
+    log.info("Getting the coverage data")
     try:
-        if merge:
-            subprocess.run("coverage", "combine")
+        with open('./coverage.json', 'r') as f:
+            return extract_info(json.load(f))
+        # if merge:
+        #     subprocess.run("coverage", "combine")
 
-        json_coverage = subprocess.run("coverage", "json", "-o", "-")
+        # json_coverage = subprocess.run("coverage", "json", "-o", "-")
     except subprocess.SubProcessError as exc:
         if "No source for code:" in str(exc):
             log.error(
