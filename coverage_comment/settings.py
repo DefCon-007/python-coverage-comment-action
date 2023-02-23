@@ -44,6 +44,7 @@ class Config:
     COVERAGE_DIFF_FILE_PATH: str | None = None
     COMMENT_ARTIFACT_NAME: str = "python-coverage-comment-action"
     COMMENT_FILENAME: pathlib.Path = pathlib.Path("python-coverage-comment-action.txt")
+    DEFAULT_GITHUB_PR_NUMBER: int | None = None
     GITHUB_OUTPUT: pathlib.Path | None = None
     MINIMUM_GREEN: decimal.Decimal = decimal.Decimal("100")
     MINIMUM_ORANGE: decimal.Decimal = decimal.Decimal("70")
@@ -105,6 +106,9 @@ class Config:
 
     @property
     def GITHUB_PR_NUMBER(self) -> int | None:
+        if self.DEFAULT_GITHUB_PR_NUMBER:
+            return self.DEFAULT_GITHUB_PR_NUMBER
+
         # "refs/pull/2/merge"
         if "pull" in self.GITHUB_REF:
             return int(self.GITHUB_REF.split("/")[2])

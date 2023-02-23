@@ -49,6 +49,11 @@ inputs:
       Name of the file in which the body of the comment to post on the PR is stored.
     default: python-coverage-comment-action.txt
     required: false
+  DEFAULT_GITHUB_PR_NUMBER:
+    description: >
+      Calculated GitHub PR number. If not present, the system will try deduce it from the ref. It
+      will be used to post the comment.
+    required: false
   MINIMUM_GREEN:
     description: >
       If the coverage percentage is above or equal to this value, the badge
@@ -96,6 +101,7 @@ runs:
     COVERAGE_DIFF_FILE_PATH: ${{ inputs.COVERAGE_DIFF_FILE_PATH}}
     COMMENT_ARTIFACT_NAME: ${{ inputs.COMMENT_ARTIFACT_NAME }}
     COMMENT_FILENAME: ${{ inputs.COMMENT_FILENAME }}
+    DEFAULT_GITHUB_PR_NUMBER: ${{ inputs.DEFAULT_GITHUB_PR_NUMBER }}
     MINIMUM_GREEN: ${{ inputs.MINIMUM_GREEN }}
     MINIMUM_ORANGE: ${{ inputs.MINIMUM_ORANGE }}
     MERGE_COVERAGE_FILES: ${{ inputs.MERGE_COVERAGE_FILES }}
