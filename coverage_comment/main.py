@@ -72,7 +72,8 @@ def action(
         return 1
 
     if event_name in {"pull_request", "push"}:
-        coverage = coverage_module.get_coverage_info(merge=config.MERGE_COVERAGE_FILES)
+        coverage = coverage_module.get_coverage_info(merge=config.MERGE_COVERAGE_FILES,
+                                                     coverage_file_path=config.COVERAGE_FILE_PATH)
         if event_name == "pull_request":
             if config.ANNOTATE_MISSING_LINES:
                 annotations.create_pr_annotations(
@@ -112,7 +113,8 @@ def generate_comment(
     gh = github_client.GitHub(session=github_session)
 
     diff_coverage = coverage_module.get_diff_coverage_info(
-        base_ref=config.GITHUB_BASE_REF
+        base_ref=config.GITHUB_BASE_REF,
+        diff_file_path=config.COVERAGE_DIFF_FILE_PATH
     )
     previous_coverage_data_file = storage.get_datafile_contents(
         github=gh,

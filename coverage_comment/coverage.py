@@ -67,12 +67,16 @@ def compute_coverage(num_covered: int, num_total: int) -> decimal.Decimal:
     return decimal.Decimal(num_covered) / decimal.Decimal(num_total)
 
 
-def get_coverage_info(merge: bool) -> Coverage:
+def get_coverage_info(merge: bool, coverage_file_path: str | None = None) -> Coverage:
     try:
-        if merge:
-            subprocess.run("coverage", "combine")
+        if coverage_file_path:
+            with open(coverage_file_path, 'r') as f:
+                json_coverage = json.load(f)
+        else:
+            if merge:
+                subprocess.run("coverage", "combine")
 
-        json_coverage = subprocess.run("coverage", "json", "-o", "-")
+            json_coverage = json.loads(subprocess.run("coverage", "json", "-o", "-"))
     except subprocess.SubProcessError as exc:
         if "No source for code:" in str(exc):
             log.error(
@@ -87,7 +91,7 @@ def get_coverage_info(merge: bool) -> Coverage:
             )
         raise
 
-    return extract_info(json.loads(json_coverage))
+    return extract_info(json_coverage)
 
 
 def generate_coverage_html_files(path: pathlib.Path) -> None:
@@ -191,19 +195,23 @@ def extract_info(data) -> Coverage:
     )
 
 
-def get_diff_coverage_info(base_ref: str) -> DiffCoverage:
-    subprocess.run("git", "fetch", "--depth=1000")
-    subprocess.run("coverage", "xml")
-    with tempfile.NamedTemporaryFile("r") as f:
-        subprocess.run(
-            "diff-cover",
-            "coverage.xml",
-            f"--compare-branch=origin/{base_ref}",
-            f"--json-report={f.name}",
-            "--diff-range-notation=..",
-            "--quiet",
-        )
-        diff_json = json.loads(pathlib.Path(f.name).read_text())
+def get_diff_coverage_info(base_ref: str, diff_file_path: str | None = None) -> DiffCoverage:
+    if diff_file_path:
+        with open(diff_file_path, 'r') as f:
+            diff_json = json.load(f)
+    else:
+        subprocess.run("git", "fetch", "--depth=1000")
+        subprocess.run("coverage", "xml")
+        with tempfile.NamedTemporaryFile("r") as f:
+            subprocess.run(
+                "diff-cover",
+                "coverage.xml",
+                f"--compare-branch=origin/{base_ref}",
+                f"--json-report={f.name}",
+                "--diff-range-notation=..",
+                "--quiet",
+            )
+            diff_json = json.loads(pathlib.Path(f.name).read_text())
 
     return extract_diff_info(diff_json)
 
