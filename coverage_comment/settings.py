@@ -106,7 +106,7 @@ class Config:
     @property
     def GITHUB_PR_NUMBER(self) -> int | None:
         # "refs/pull/2/merge"
-        log.info('The given pr numb is ', self.GITHUB_PR_NUM)
+        log.info(f'The given pr numb is {self.GITHUB_PR_NUM}')
         if self.GITHUB_PR_NUM:
             return self.GITHUB_PR_NUM
         if "pull" in self.GITHUB_REF:

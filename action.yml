@@ -17,6 +17,9 @@ inputs:
       Only useful on the "workflow_run" part of the workflow.
       Set to `$ {{ github.event.workflow_run.id }}`  (without the space between `$` and `{`).
     required: false
+  GITHUB_PR_NUM:
+    description: The PR number of opened PR
+    required: false
   COMMENT_TEMPLATE:
     description: >
       [Advanced] Specify a different template for the comments that will be written on
@@ -83,6 +86,7 @@ runs:
   env:
     GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     GITHUB_PR_RUN_ID: ${{ inputs.GITHUB_PR_RUN_ID }}
+    GITHUB_PR_NUM: ${{ inputs.GITHUB_PR_NUM }}
     COMMENT_TEMPLATE: ${{ inputs.COMMENT_TEMPLATE }}
     COVERAGE_DATA_BRANCH: ${{ inputs.COVERAGE_DATA_BRANCH }}
     COMMENT_ARTIFACT_NAME: ${{ inputs.COMMENT_ARTIFACT_NAME }}
