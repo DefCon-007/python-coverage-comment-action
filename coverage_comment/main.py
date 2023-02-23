@@ -74,26 +74,24 @@ def action(
     if event_name in {"pull_request", "push"}:
         coverage = coverage_module.get_coverage_info(merge=config.MERGE_COVERAGE_FILES,
                                                      coverage_file_path=config.COVERAGE_FILE_PATH)
-        if event_name == "pull_request":
-            if config.ANNOTATE_MISSING_LINES:
-                annotations.create_pr_annotations(
-                    annotation_type=config.ANNOTATION_TYPE, coverage=coverage
-                )
+        if config.ANNOTATE_MISSING_LINES:
+            annotations.create_pr_annotations(
+                annotation_type=config.ANNOTATION_TYPE, coverage=coverage
+            )
 
-            return generate_comment(
-                config=config,
-                coverage=coverage,
-                github_session=github_session,
-            )
-        else:
-            # event_name == "push"
-            return save_coverage_data_files(
-                config=config,
-                coverage=coverage,
-                github_session=github_session,
-                git=git,
-                http_session=http_session,
-            )
+        generate_comment(
+            config=config,
+            coverage=coverage,
+            github_session=github_session,
+        )
+
+        return save_coverage_data_files(
+            config=config,
+            coverage=coverage,
+            github_session=github_session,
+            git=git,
+            http_session=http_session,
+        )
 
     else:
         # event_name == "workflow_run"
@@ -151,6 +149,8 @@ def generate_comment(
         return 1
 
     assert config.GITHUB_PR_NUMBER
+    log.info(f'Publishing comment on the PR #{config.GITHUB_PR_NUMBER}')
+
     try:
         if config.FORCE_WORKFLOW_RUN:
             raise github.CannotPostComment
