@@ -195,18 +195,10 @@ def extract_info(data) -> Coverage:
 
 
 def get_diff_coverage_info(base_ref: str) -> DiffCoverage:
-    subprocess.run("git", "fetch", "--depth=1000")
-    subprocess.run("coverage", "xml")
-    with tempfile.NamedTemporaryFile("r") as f:
-        subprocess.run(
-            "diff-cover",
-            "coverage.xml",
-            f"--compare-branch=origin/{base_ref}",
-            f"--json-report={f.name}",
-            "--diff-range-notation=..",
-            "--quiet",
-        )
-        diff_json = json.loads(pathlib.Path(f.name).read_text())
+    log.info('Reading coverage diff json')
+
+    with open('/github/workspace/coverage/coverage-diff.json', 'r') as f:
+        diff_json = json.load(f)
 
     return extract_diff_info(diff_json)
 
