@@ -29,6 +29,7 @@ class RepositoryInfo:
     visibility: str
 
     def is_default_branch(self, ref: str) -> bool:
+        return True
         return f"refs/heads/{self.default_branch}" == ref
 
     def is_public(self) -> bool:
