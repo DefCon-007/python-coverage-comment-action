@@ -273,7 +273,8 @@ def save_coverage_data_files(
         log.info("Generating HTML coverage report")
         operations.append(files.get_coverage_html_files(config=config))
 
-    markdown_report = coverage_module.generate_coverage_markdown()
+    # markdown_report = coverage_module.generate_coverage_markdown()
+    markdown_report = ""
 
     url_getter = functools.partial(
         storage.get_raw_file_url,
