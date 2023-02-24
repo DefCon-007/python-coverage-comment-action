@@ -13,7 +13,7 @@ from typing import Protocol, TypedDict
 
 import httpx
 
-from coverage_comment import badge, coverage, log
+from coverage_comment import badge, coverage, log, settings
 
 ENDPOINT_PATH = pathlib.Path("endpoint.json")
 DATA_PATH = pathlib.Path("data.json")
@@ -45,7 +45,7 @@ class ReplaceDir:
     Deletes the dir at `path`, then copies the dir from source to destination
     """
 
-    source: pathlib.Path
+    source: pathlib.Path | str
     path: pathlib.Path
 
     def apply(self):
@@ -112,10 +112,16 @@ def get_urls(url_getter: Callable) -> ImageURLs:
     }
 
 
-def get_coverage_html_files(gen_dir: pathlib.Path = pathlib.Path("/tmp")) -> ReplaceDir:
-    source = pathlib.Path(tempfile.mkdtemp(dir=gen_dir))
-    coverage.generate_coverage_html_files(path=source)
+def get_coverage_html_files(gen_dir: pathlib.Path = pathlib.Path("/tmp"),
+                            config: settings.Config | None = None) -> ReplaceDir:
+    if config and config.COVERAGE_HTML_FOLDER_PATH:
+        source = config.COVERAGE_HTML_FOLDER_PATH
+    else:
+        source = pathlib.Path(tempfile.mkdtemp(dir=gen_dir))
+        coverage.generate_coverage_html_files(path=source)
+        # Coverage may or may not create a .gitignore.
+        (source / ".gitignore").unlink(missing_ok=True)
+
     dest = pathlib.Path("htmlcov")
-    # Coverage may or may not create a .gitignore.
-    (source / ".gitignore").unlink(missing_ok=True)
+
     return ReplaceDir(source=source, path=dest)

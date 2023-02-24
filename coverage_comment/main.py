@@ -271,7 +271,7 @@ def save_coverage_data_files(
     is_public = repo_info.is_public()
     if is_public:
         log.info("Generating HTML coverage report")
-        operations.append(files.get_coverage_html_files())
+        operations.append(files.get_coverage_html_files(config=config))
 
     markdown_report = coverage_module.generate_coverage_markdown()
 

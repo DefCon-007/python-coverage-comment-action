@@ -32,6 +32,10 @@ inputs:
       The path to the already generated coverage diff JSON file. If not set, the diff json is
       generated using `diff-cover`.
     required: false
+  COVERAGE_HTML_FOLDER_PATH:
+    description: >
+      The path to the folder which contains the generated html report.
+    required: false
   COVERAGE_DATA_BRANCH:
     description: >
       Name of the branch in which coverage data will be stored on the repository.
@@ -99,6 +103,7 @@ runs:
     COVERAGE_DATA_BRANCH: ${{ inputs.COVERAGE_DATA_BRANCH }}
     COVERAGE_FILE_PATH: ${{ inputs.COVERAGE_FILE_PATH }}
     COVERAGE_DIFF_FILE_PATH: ${{ inputs.COVERAGE_DIFF_FILE_PATH}}
+    COVERAGE_HTML_FOLDER_PATH: ${{ inputs.COVERAGE_HTML_FOLDER_PATH }}
     COMMENT_ARTIFACT_NAME: ${{ inputs.COMMENT_ARTIFACT_NAME }}
     COMMENT_FILENAME: ${{ inputs.COMMENT_FILENAME }}
     DEFAULT_GITHUB_PR_NUMBER: ${{ inputs.DEFAULT_GITHUB_PR_NUMBER }}
